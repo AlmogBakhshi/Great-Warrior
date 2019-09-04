@@ -1,0 +1,10 @@
+import React from 'react';
+import StackNavigator from './src/routes/StackNavigator'
+
+const App = () => {
+  return (
+    <StackNavigator />
+  );
+}
+
+export default App;
