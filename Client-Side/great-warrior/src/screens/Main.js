@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import {observer, inject} from 'mobx-react'
 
 const Main = props => {
     return (
@@ -11,7 +12,7 @@ const Main = props => {
     );
 }
 
-export default Main;
+export default inject('rootStore')(observer(Main));
 
 const styles = StyleSheet.create({
     page: { flex: 1 }
