@@ -5,13 +5,14 @@ import {
 } from 'react-native'
 import { observer, inject } from 'mobx-react'
 
+let timer;
 const Login = props => {
-    let timer;
     useEffect(() => {
         AsyncStorage.getItem('user').then(res => res !== null && props.navigation.replace('Main') && clearInterval(timer));
         let x = 1;
         let y = 10;
         timer = setInterval(() => {
+            //console.log('timer')
             if (props.rootStore.loginStore.characterPosition.x === 40 || props.rootStore.loginStore.characterPosition.x === -40) {
                 x *= -1;
                 if (props.rootStore.loginStore.characterPosition.y === 20 || props.rootStore.loginStore.characterPosition.y === -40)
@@ -26,9 +27,7 @@ const Login = props => {
         <KeyboardAvoidingView style={styles.page} behavior="padding" >
             <ImageBackground style={styles.page} resizeMode='stretch' source={require('../../assets/images/screen2.png')}>
                 <View style={styles.logo}>
-                    <Text>
-                        Login
-                </Text>
+                    <Image style={styles.logoImage} source={require('../../assets/images/logo.png')} resizeMode='contain' />
                 </View>
                 <View style={styles.form}>
                     <TextInput
@@ -42,11 +41,11 @@ const Login = props => {
                         style={styles.txtInput}
                         placeholder="Password"
                         placeholderTextColor='black'
-                        maxLength={12}
+                        maxLength={20}
                         secureTextEntry={true}
                         value={props.rootStore.loginStore.password}
                         onChangeText={e => props.rootStore.loginStore.setPassword(e)} />
-                    <TouchableOpacity style={{ flex: 0.1, width: '40%', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: "black", borderRadius: 10 }}>
+                    <TouchableOpacity style={styles.submitButton} onPress={() => props.navigation.replace('Main')}>
                         <Text>Login</Text>
                     </TouchableOpacity>
                     <View style={styles.socialLogin}>
@@ -63,7 +62,7 @@ const Login = props => {
                         left: `${props.rootStore.loginStore.characterPosition.x}%`,
                         top: `${props.rootStore.loginStore.characterPosition.y}%`
                     }]}
-                        onPress={() => props.navigation.navigate('Register')}
+                        onPress={() => props.navigation.navigate('Register', { timer })}
                     >
                         <ImageBackground source={require('../../assets/images/character2.png')} resizeMode='contain' style={styles.characterImage}>
                             <Text style={styles.characterText}>Register</Text>
@@ -80,8 +79,10 @@ export default inject('rootStore')(observer(Login));
 const styles = StyleSheet.create({
     page: { flex: 1 },
     logo: { flex: 0.2, alignItems: 'center', justifyContent: 'center' },
+    logoImage: { flex: 1 },
     form: { flex: 0.6, alignItems: 'center', justifyContent: 'space-evenly' },
-    txtInput: { flex: 0.1, width: '90%', textAlign: 'center', borderWidth: 1, borderColor: "black", borderRadius: 10 },
+    txtInput: { height: 40, width: '90%', textAlign: 'center', borderWidth: 1, borderColor: "black", borderRadius: 10 },
+    submitButton: { height: 40, width: '40%', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: "black", borderRadius: 10 },
     socialLogin: { flex: 0.3, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' },
     socialButton: { flex: 0.5, alignItems: 'center' },
     socialImage: { flex: 1, width: '50%' },

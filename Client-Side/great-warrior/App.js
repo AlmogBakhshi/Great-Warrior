@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, StatusBar } from 'react-native'
+import { View, StyleSheet, StatusBar, I18nManager } from 'react-native'
 import { Provider } from 'mobx-react'
 import RootStore from './src/stores/RootStore'
 import StackNavigator from './src/routes/StackNavigator'
+
+I18nManager.allowRTL(false);
+I18nManager.forceRTL(false);
 
 const App = () => {
   return (
