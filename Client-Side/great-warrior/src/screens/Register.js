@@ -1,5 +1,8 @@
 import React from 'react'
-import { View, Text, TextInput, TouchableOpacity, Image, ImageBackground, KeyboardAvoidingView, StyleSheet } from 'react-native'
+import {
+    View, Text, TextInput, TouchableOpacity, Image, AsyncStorage,
+    ImageBackground, Alert, KeyboardAvoidingView, StyleSheet
+} from 'react-native'
 import { observer, inject } from 'mobx-react'
 
 const Register = props => {
@@ -11,8 +14,16 @@ const Register = props => {
     const HandleSubmit = () => {
         if (regexEmail.test(email.toUpperCase()) && regexPassword.test(password) &&
             regexPassword.test(confirmPassword) && password === confirmPassword) {
-            clearInterval(props.navigation.getParam('timer'));
-            props.navigation.replace('Main');
+            props.rootStore.registerStore.register()
+                .then(res => {
+                    res === 'exist' ? Alert.alert('Warning', 'Email already exist')
+                        : res ? AsyncStorage.setItem('user', email)
+                            .then(() => {
+                                props.navigation.goBack();
+                                props.rootStore.registerStore.setGoBack()
+                            })
+                            : Alert.alert('Error', 'There is problem with the server.\nTry again later')
+                })
         }
     }
 
@@ -21,7 +32,7 @@ const Register = props => {
             <ImageBackground style={styles.page} resizeMode='stretch' source={require('../../assets/images/screen2.png')}>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.backButton} onPress={() => props.navigation.goBack()}>
-                        <Text>Back</Text>
+                        <Image resizeMode='contain' source={require('../../assets/images/back.png')} />
                     </TouchableOpacity>
                     <Image style={styles.logoImage} source={require('../../assets/images/logo.png')} resizeMode='contain' />
                 </View>
@@ -39,7 +50,7 @@ const Register = props => {
                             onChangeText={e => props.rootStore.registerStore.setEmail(e)}
                         />
                         <Text style={styles.inputError}>
-                            {(email === '' && "Enter your email" || !regexEmail.test(email.toUpperCase()) && "Email is invalid or already taken" ||
+                            {(email === '' && "Enter your email" || !regexEmail.test(email.toUpperCase()) && "Email is invalid" ||
                                 "We’ll occasionally send updates about your account to this inbox.\nWe’ll never share your email address with anyone.")}
                         </Text>
                     </View>
@@ -96,7 +107,7 @@ const styles = StyleSheet.create({
     page: { flex: 1 },
     header: { flex: 0.2, alignItems: 'center' },
     logoImage: { flex: 1 },
-    backButton: { position: 'absolute', left: '5%', top: '5%' },
+    backButton: { position: 'absolute', left: '5%', top: '15%' },
     form: { flex: 0.8, alignItems: 'center', justifyContent: 'space-evenly' },
     inputContainer: { width: '100%', alignItems: 'center' },
     txtInput: { height: 40, width: '90%', textAlign: 'center', borderWidth: 1, borderColor: "black", borderRadius: 10 },

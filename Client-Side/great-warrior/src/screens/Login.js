@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import {
-    ImageBackground, View, Text, TextInput, TouchableOpacity,
+    ImageBackground, View, Text, TextInput, TouchableOpacity, Alert,
     Image, KeyboardAvoidingView, StyleSheet, AsyncStorage
 } from 'react-native'
 import { observer, inject } from 'mobx-react'
 
-let timer;
 const Login = props => {
+    let timer;
     useEffect(() => {
-        AsyncStorage.getItem('user').then(res => res !== null && props.navigation.replace('Main') && clearInterval(timer));
+        AsyncStorage.clear();
+        HandleGoMain();
         let x = 1;
         let y = 10;
         timer = setInterval(() => {
@@ -22,6 +23,39 @@ const Login = props => {
             props.rootStore.loginStore.setCharacterPosition(x, 0)
         }, 100);
     }, [])
+
+    useEffect(() => {
+        HandleGoMain();
+    }, [props.rootStore.registerStore.goBack])
+
+    const HandleGoMain = () => {
+        AsyncStorage.getItem('user').then(res => res !== null && props.navigation.replace('Main') && clearInterval(timer));
+    }
+
+    const HandleLogin = () => {
+        if (props.rootStore.loginStore.email.trim() !== '' && props.rootStore.loginStore.password.trim() !== '') {
+            props.rootStore.loginStore.login()
+                .then(res => {
+                    res === 'notExist' ? Alert.alert('Warning', 'Wrang email or password')
+                        : res ? AsyncStorage.setItem('user', props.rootStore.loginStore.email).then(HandleGoMain())
+                            : Alert.alert('Error', 'There is problem with the server.\nTry again later')
+                });
+        }
+        else Alert.alert('Warning', 'Wrang email or password');
+    }
+
+    const HandleFaceBookLogin = () => {
+        props.rootStore.loginStore.facebookLogin().then(res => HandleSocialLogin(res));
+    }
+
+    const HandleGoogleLogin = () => {
+        props.rootStore.loginStore.googleLogin().then(res => HandleSocialLogin(res));
+    }
+
+    const HandleSocialLogin = res => {
+        res ? AsyncStorage.setItem('user', res).then(HandleGoMain())
+            : Alert.alert('Error', 'There is problem with the server.\nTry again later')
+    }
 
     return (
         <KeyboardAvoidingView style={styles.page} behavior="padding" >
@@ -45,14 +79,14 @@ const Login = props => {
                         secureTextEntry={true}
                         value={props.rootStore.loginStore.password}
                         onChangeText={e => props.rootStore.loginStore.setPassword(e)} />
-                    <TouchableOpacity style={styles.submitButton} onPress={() => props.navigation.replace('Main')}>
+                    <TouchableOpacity style={styles.submitButton} onPress={HandleLogin}>
                         <Text>Login</Text>
                     </TouchableOpacity>
                     <View style={styles.socialLogin}>
-                        <TouchableOpacity style={styles.socialButton}>
+                        <TouchableOpacity style={styles.socialButton} onPress={HandleFaceBookLogin}>
                             <Image style={styles.socialImage} resizeMode='contain' source={require('../../assets/images/Facebook.png')} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.socialButton}>
+                        <TouchableOpacity style={styles.socialButton} onPress={HandleGoogleLogin}>
                             <Image style={styles.socialImage} resizeMode='contain' source={require('../../assets/images/Google.png')} />
                         </TouchableOpacity>
                     </View>
@@ -62,7 +96,7 @@ const Login = props => {
                         left: `${props.rootStore.loginStore.characterPosition.x}%`,
                         top: `${props.rootStore.loginStore.characterPosition.y}%`
                     }]}
-                        onPress={() => props.navigation.navigate('Register', { timer })}
+                        onPress={() => props.navigation.navigate('Register')}
                     >
                         <ImageBackground source={require('../../assets/images/character2.png')} resizeMode='contain' style={styles.characterImage}>
                             <Text style={styles.characterText}>Register</Text>
