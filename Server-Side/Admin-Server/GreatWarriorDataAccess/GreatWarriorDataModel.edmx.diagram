@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2e2ea93a79154de98f7a2ac1615994c0" Name="Diagram1">
+        <EntityTypeShape EntityType="GreatWarriorModel.Admin" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.FigureItem" Width="1.5" PointX="3" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.FigureItemsByPlayer" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.Figure" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.FiguresInGame" Width="1.5" PointX="5.25" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.FiguresOfPlayer" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.GamesHistory" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.PlayerGift" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GreatWarriorModel.Player" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
+        <AssociationConnector Association="GreatWarriorModel.FK_FigureItemsByPlayer_FigureItem_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_FigureItemsByPlayer_FiguresOfPlayer_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_FiguresInGames_Figure_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_FiguresOfPlayer_Figure_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_FiguresInGames_GamesHistory_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_FiguresInGames_Player_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_FiguresOfPlayer_Player_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_GamesHistory_PlayerOne_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_GamesHistory_PlayerTwo_Code" ManuallyRouted="false" />
+        <AssociationConnector Association="GreatWarriorModel.FK_PlayerGift_Player_Code" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,683 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GreatWarriorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admins">
+          <Key>
+            <PropertyRef Name="Admin_Email" />
+          </Key>
+          <Property Name="Admin_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Admin_Password" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FigureItems">
+          <Key>
+            <PropertyRef Name="FigureItem_Name" />
+          </Key>
+          <Property Name="FigureItem_Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Item_Image" Type="image" />
+        </EntityType>
+        <EntityType Name="FigureItemsByPlayer">
+          <Key>
+            <PropertyRef Name="Player_Email" />
+            <PropertyRef Name="Figure_Name" />
+            <PropertyRef Name="FigureItem_Name" />
+          </Key>
+          <Property Name="Player_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Figure_Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="FigureItem_Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Item_Level" Type="tinyint" />
+          <Property Name="Figure_Attack" Type="tinyint" />
+          <Property Name="Figure_Defense" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Figures">
+          <Key>
+            <PropertyRef Name="Figure_Name" />
+          </Key>
+          <Property Name="Figure_Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Figure_Image" Type="image" />
+          <Property Name="Figure_Attack" Type="tinyint" />
+          <Property Name="Figure_Defense" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="FiguresInGames">
+          <Key>
+            <PropertyRef Name="Player_One_Email" />
+            <PropertyRef Name="Player_Two_Email" />
+            <PropertyRef Name="Game_Date" />
+            <PropertyRef Name="Player_Email" />
+            <PropertyRef Name="Figure_Name" />
+          </Key>
+          <Property Name="Player_One_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Player_Two_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Game_Date" Type="datetime" Nullable="false" />
+          <Property Name="Player_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Figure_Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Figure_Level" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="FiguresOfPlayer">
+          <Key>
+            <PropertyRef Name="Player_Email" />
+            <PropertyRef Name="Figure_Name" />
+          </Key>
+          <Property Name="Player_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Figure_Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Figure_Level" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="GamesHistory">
+          <Key>
+            <PropertyRef Name="Player_One_Email" />
+            <PropertyRef Name="Player_Two_Email" />
+            <PropertyRef Name="Game_Date" />
+          </Key>
+          <Property Name="Player_One_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Player_Two_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Game_Date" Type="datetime" Nullable="false" />
+          <Property Name="Winner_Player" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PlayerGift">
+          <Key>
+            <PropertyRef Name="Gift_Code" />
+          </Key>
+          <Property Name="Gift_Code" Type="int" Nullable="false" />
+          <Property Name="Player_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Gift_Level" Type="tinyint" />
+          <Property Name="Gift_Receive" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Players">
+          <Key>
+            <PropertyRef Name="Player_Email" />
+          </Key>
+          <Property Name="Player_Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Player_Name" Type="nvarchar" MaxLength="20" />
+          <Property Name="Player_Password" Type="nvarchar(max)" />
+          <Property Name="Player_Score" Type="int" />
+        </EntityType>
+        <Association Name="FK_FigureItemsByPlayer_FigureItem_Code">
+          <End Role="FigureItems" Type="Self.FigureItems" Multiplicity="1" />
+          <End Role="FigureItemsByPlayer" Type="Self.FigureItemsByPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FigureItems">
+              <PropertyRef Name="FigureItem_Name" />
+            </Principal>
+            <Dependent Role="FigureItemsByPlayer">
+              <PropertyRef Name="FigureItem_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FigureItemsByPlayer_FiguresOfPlayer_Code">
+          <End Role="FiguresOfPlayer" Type="Self.FiguresOfPlayer" Multiplicity="1" />
+          <End Role="FigureItemsByPlayer" Type="Self.FigureItemsByPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FiguresOfPlayer">
+              <PropertyRef Name="Player_Email" />
+              <PropertyRef Name="Figure_Name" />
+            </Principal>
+            <Dependent Role="FigureItemsByPlayer">
+              <PropertyRef Name="Player_Email" />
+              <PropertyRef Name="Figure_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresInGames_Figure_Code">
+          <End Role="Figures" Type="Self.Figures" Multiplicity="1" />
+          <End Role="FiguresInGames" Type="Self.FiguresInGames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Figures">
+              <PropertyRef Name="Figure_Name" />
+            </Principal>
+            <Dependent Role="FiguresInGames">
+              <PropertyRef Name="Figure_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresInGames_GamesHistory_Code">
+          <End Role="GamesHistory" Type="Self.GamesHistory" Multiplicity="1" />
+          <End Role="FiguresInGames" Type="Self.FiguresInGames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GamesHistory">
+              <PropertyRef Name="Player_One_Email" />
+              <PropertyRef Name="Player_Two_Email" />
+              <PropertyRef Name="Game_Date" />
+            </Principal>
+            <Dependent Role="FiguresInGames">
+              <PropertyRef Name="Player_One_Email" />
+              <PropertyRef Name="Player_Two_Email" />
+              <PropertyRef Name="Game_Date" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresInGames_Player_Code">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="FiguresInGames" Type="Self.FiguresInGames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="FiguresInGames">
+              <PropertyRef Name="Player_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresOfPlayer_Figure_Code">
+          <End Role="Figures" Type="Self.Figures" Multiplicity="1" />
+          <End Role="FiguresOfPlayer" Type="Self.FiguresOfPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Figures">
+              <PropertyRef Name="Figure_Name" />
+            </Principal>
+            <Dependent Role="FiguresOfPlayer">
+              <PropertyRef Name="Figure_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresOfPlayer_Player_Code">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="FiguresOfPlayer" Type="Self.FiguresOfPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="FiguresOfPlayer">
+              <PropertyRef Name="Player_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GamesHistory_PlayerOne_Code">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="GamesHistory" Type="Self.GamesHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="GamesHistory">
+              <PropertyRef Name="Player_One_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GamesHistory_PlayerTwo_Code">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="GamesHistory" Type="Self.GamesHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="GamesHistory">
+              <PropertyRef Name="Player_Two_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlayerGift_Player_Code">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="PlayerGift" Type="Self.PlayerGift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="PlayerGift">
+              <PropertyRef Name="Player_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GreatWarriorModelStoreContainer">
+          <EntitySet Name="Admins" EntityType="Self.Admins" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="FigureItems" EntityType="Self.FigureItems" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="FigureItemsByPlayer" EntityType="Self.FigureItemsByPlayer" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="Figures" EntityType="Self.Figures" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="FiguresInGames" EntityType="Self.FiguresInGames" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="FiguresOfPlayer" EntityType="Self.FiguresOfPlayer" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="GamesHistory" EntityType="Self.GamesHistory" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="PlayerGift" EntityType="Self.PlayerGift" Schema="site04" store:Type="Tables" />
+          <EntitySet Name="Players" EntityType="Self.Players" Schema="site04" store:Type="Tables" />
+          <AssociationSet Name="FK_FigureItemsByPlayer_FigureItem_Code" Association="Self.FK_FigureItemsByPlayer_FigureItem_Code">
+            <End Role="FigureItems" EntitySet="FigureItems" />
+            <End Role="FigureItemsByPlayer" EntitySet="FigureItemsByPlayer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FigureItemsByPlayer_FiguresOfPlayer_Code" Association="Self.FK_FigureItemsByPlayer_FiguresOfPlayer_Code">
+            <End Role="FiguresOfPlayer" EntitySet="FiguresOfPlayer" />
+            <End Role="FigureItemsByPlayer" EntitySet="FigureItemsByPlayer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresInGames_Figure_Code" Association="Self.FK_FiguresInGames_Figure_Code">
+            <End Role="Figures" EntitySet="Figures" />
+            <End Role="FiguresInGames" EntitySet="FiguresInGames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresInGames_GamesHistory_Code" Association="Self.FK_FiguresInGames_GamesHistory_Code">
+            <End Role="GamesHistory" EntitySet="GamesHistory" />
+            <End Role="FiguresInGames" EntitySet="FiguresInGames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresInGames_Player_Code" Association="Self.FK_FiguresInGames_Player_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="FiguresInGames" EntitySet="FiguresInGames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresOfPlayer_Figure_Code" Association="Self.FK_FiguresOfPlayer_Figure_Code">
+            <End Role="Figures" EntitySet="Figures" />
+            <End Role="FiguresOfPlayer" EntitySet="FiguresOfPlayer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresOfPlayer_Player_Code" Association="Self.FK_FiguresOfPlayer_Player_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="FiguresOfPlayer" EntitySet="FiguresOfPlayer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GamesHistory_PlayerOne_Code" Association="Self.FK_GamesHistory_PlayerOne_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="GamesHistory" EntitySet="GamesHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GamesHistory_PlayerTwo_Code" Association="Self.FK_GamesHistory_PlayerTwo_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="GamesHistory" EntitySet="GamesHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlayerGift_Player_Code" Association="Self.FK_PlayerGift_Player_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="PlayerGift" EntitySet="PlayerGift" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GreatWarriorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_Email" />
+          </Key>
+          <Property Name="Admin_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Admin_Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FigureItem">
+          <Key>
+            <PropertyRef Name="FigureItem_Name" />
+          </Key>
+          <Property Name="FigureItem_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Item_Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="FigureItemsByPlayers" Relationship="Self.FK_FigureItemsByPlayer_FigureItem_Code" FromRole="FigureItems" ToRole="FigureItemsByPlayer" />
+        </EntityType>
+        <EntityType Name="FigureItemsByPlayer">
+          <Key>
+            <PropertyRef Name="Player_Email" />
+            <PropertyRef Name="Figure_Name" />
+            <PropertyRef Name="FigureItem_Name" />
+          </Key>
+          <Property Name="Player_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Figure_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FigureItem_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Item_Level" Type="Byte" />
+          <Property Name="Figure_Attack" Type="Byte" />
+          <Property Name="Figure_Defense" Type="Byte" />
+          <NavigationProperty Name="FigureItem" Relationship="Self.FK_FigureItemsByPlayer_FigureItem_Code" FromRole="FigureItemsByPlayer" ToRole="FigureItems" />
+          <NavigationProperty Name="FiguresOfPlayer" Relationship="Self.FK_FigureItemsByPlayer_FiguresOfPlayer_Code" FromRole="FigureItemsByPlayer" ToRole="FiguresOfPlayer" />
+        </EntityType>
+        <EntityType Name="Figure">
+          <Key>
+            <PropertyRef Name="Figure_Name" />
+          </Key>
+          <Property Name="Figure_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Figure_Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Figure_Attack" Type="Byte" />
+          <Property Name="Figure_Defense" Type="Byte" />
+          <NavigationProperty Name="FiguresInGames" Relationship="Self.FK_FiguresInGames_Figure_Code" FromRole="Figures" ToRole="FiguresInGames" />
+          <NavigationProperty Name="FiguresOfPlayers" Relationship="Self.FK_FiguresOfPlayer_Figure_Code" FromRole="Figures" ToRole="FiguresOfPlayer" />
+        </EntityType>
+        <EntityType Name="FiguresInGame">
+          <Key>
+            <PropertyRef Name="Player_One_Email" />
+            <PropertyRef Name="Player_Two_Email" />
+            <PropertyRef Name="Game_Date" />
+            <PropertyRef Name="Player_Email" />
+            <PropertyRef Name="Figure_Name" />
+          </Key>
+          <Property Name="Player_One_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Player_Two_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Game_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Player_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Figure_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Figure_Level" Type="Byte" />
+          <NavigationProperty Name="Figure" Relationship="Self.FK_FiguresInGames_Figure_Code" FromRole="FiguresInGames" ToRole="Figures" />
+          <NavigationProperty Name="GamesHistory" Relationship="Self.FK_FiguresInGames_GamesHistory_Code" FromRole="FiguresInGames" ToRole="GamesHistory" />
+          <NavigationProperty Name="Player" Relationship="Self.FK_FiguresInGames_Player_Code" FromRole="FiguresInGames" ToRole="Players" />
+        </EntityType>
+        <EntityType Name="FiguresOfPlayer">
+          <Key>
+            <PropertyRef Name="Player_Email" />
+            <PropertyRef Name="Figure_Name" />
+          </Key>
+          <Property Name="Player_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Figure_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Figure_Level" Type="Byte" />
+          <NavigationProperty Name="FigureItemsByPlayers" Relationship="Self.FK_FigureItemsByPlayer_FiguresOfPlayer_Code" FromRole="FiguresOfPlayer" ToRole="FigureItemsByPlayer" />
+          <NavigationProperty Name="Figure" Relationship="Self.FK_FiguresOfPlayer_Figure_Code" FromRole="FiguresOfPlayer" ToRole="Figures" />
+          <NavigationProperty Name="Player" Relationship="Self.FK_FiguresOfPlayer_Player_Code" FromRole="FiguresOfPlayer" ToRole="Players" />
+        </EntityType>
+        <EntityType Name="GamesHistory">
+          <Key>
+            <PropertyRef Name="Player_One_Email" />
+            <PropertyRef Name="Player_Two_Email" />
+            <PropertyRef Name="Game_Date" />
+          </Key>
+          <Property Name="Player_One_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Player_Two_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Game_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Winner_Player" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FiguresInGames" Relationship="Self.FK_FiguresInGames_GamesHistory_Code" FromRole="GamesHistory" ToRole="FiguresInGames" />
+          <NavigationProperty Name="Player" Relationship="Self.FK_GamesHistory_PlayerOne_Code" FromRole="GamesHistory" ToRole="Players" />
+          <NavigationProperty Name="Player1" Relationship="Self.FK_GamesHistory_PlayerTwo_Code" FromRole="GamesHistory" ToRole="Players" />
+        </EntityType>
+        <EntityType Name="PlayerGift">
+          <Key>
+            <PropertyRef Name="Gift_Code" />
+          </Key>
+          <Property Name="Gift_Code" Type="Int32" Nullable="false" />
+          <Property Name="Player_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gift_Level" Type="Byte" />
+          <Property Name="Gift_Receive" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Player" Relationship="Self.FK_PlayerGift_Player_Code" FromRole="PlayerGift" ToRole="Players" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="Player_Email" />
+          </Key>
+          <Property Name="Player_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Player_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Player_Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Player_Score" Type="Int32" />
+          <NavigationProperty Name="FiguresInGames" Relationship="Self.FK_FiguresInGames_Player_Code" FromRole="Players" ToRole="FiguresInGames" />
+          <NavigationProperty Name="FiguresOfPlayers" Relationship="Self.FK_FiguresOfPlayer_Player_Code" FromRole="Players" ToRole="FiguresOfPlayer" />
+          <NavigationProperty Name="GamesHistories" Relationship="Self.FK_GamesHistory_PlayerOne_Code" FromRole="Players" ToRole="GamesHistory" />
+          <NavigationProperty Name="GamesHistories1" Relationship="Self.FK_GamesHistory_PlayerTwo_Code" FromRole="Players" ToRole="GamesHistory" />
+          <NavigationProperty Name="PlayerGifts" Relationship="Self.FK_PlayerGift_Player_Code" FromRole="Players" ToRole="PlayerGift" />
+        </EntityType>
+        <Association Name="FK_FigureItemsByPlayer_FigureItem_Code">
+          <End Role="FigureItems" Type="Self.FigureItem" Multiplicity="1" />
+          <End Role="FigureItemsByPlayer" Type="Self.FigureItemsByPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FigureItems">
+              <PropertyRef Name="FigureItem_Name" />
+            </Principal>
+            <Dependent Role="FigureItemsByPlayer">
+              <PropertyRef Name="FigureItem_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FigureItemsByPlayer_FiguresOfPlayer_Code">
+          <End Role="FiguresOfPlayer" Type="Self.FiguresOfPlayer" Multiplicity="1" />
+          <End Role="FigureItemsByPlayer" Type="Self.FigureItemsByPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FiguresOfPlayer">
+              <PropertyRef Name="Player_Email" />
+              <PropertyRef Name="Figure_Name" />
+            </Principal>
+            <Dependent Role="FigureItemsByPlayer">
+              <PropertyRef Name="Player_Email" />
+              <PropertyRef Name="Figure_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresInGames_Figure_Code">
+          <End Role="Figures" Type="Self.Figure" Multiplicity="1" />
+          <End Role="FiguresInGames" Type="Self.FiguresInGame" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Figures">
+              <PropertyRef Name="Figure_Name" />
+            </Principal>
+            <Dependent Role="FiguresInGames">
+              <PropertyRef Name="Figure_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresOfPlayer_Figure_Code">
+          <End Role="Figures" Type="Self.Figure" Multiplicity="1" />
+          <End Role="FiguresOfPlayer" Type="Self.FiguresOfPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Figures">
+              <PropertyRef Name="Figure_Name" />
+            </Principal>
+            <Dependent Role="FiguresOfPlayer">
+              <PropertyRef Name="Figure_Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresInGames_GamesHistory_Code">
+          <End Role="GamesHistory" Type="Self.GamesHistory" Multiplicity="1" />
+          <End Role="FiguresInGames" Type="Self.FiguresInGame" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GamesHistory">
+              <PropertyRef Name="Player_One_Email" />
+              <PropertyRef Name="Player_Two_Email" />
+              <PropertyRef Name="Game_Date" />
+            </Principal>
+            <Dependent Role="FiguresInGames">
+              <PropertyRef Name="Player_One_Email" />
+              <PropertyRef Name="Player_Two_Email" />
+              <PropertyRef Name="Game_Date" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresInGames_Player_Code">
+          <End Role="Players" Type="Self.Player" Multiplicity="1" />
+          <End Role="FiguresInGames" Type="Self.FiguresInGame" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="FiguresInGames">
+              <PropertyRef Name="Player_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FiguresOfPlayer_Player_Code">
+          <End Role="Players" Type="Self.Player" Multiplicity="1" />
+          <End Role="FiguresOfPlayer" Type="Self.FiguresOfPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="FiguresOfPlayer">
+              <PropertyRef Name="Player_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GamesHistory_PlayerOne_Code">
+          <End Role="Players" Type="Self.Player" Multiplicity="1" />
+          <End Role="GamesHistory" Type="Self.GamesHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="GamesHistory">
+              <PropertyRef Name="Player_One_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GamesHistory_PlayerTwo_Code">
+          <End Role="Players" Type="Self.Player" Multiplicity="1" />
+          <End Role="GamesHistory" Type="Self.GamesHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="GamesHistory">
+              <PropertyRef Name="Player_Two_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlayerGift_Player_Code">
+          <End Role="Players" Type="Self.Player" Multiplicity="1" />
+          <End Role="PlayerGift" Type="Self.PlayerGift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Player_Email" />
+            </Principal>
+            <Dependent Role="PlayerGift">
+              <PropertyRef Name="Player_Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GreatWarriorEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="FigureItems" EntityType="Self.FigureItem" />
+          <EntitySet Name="FigureItemsByPlayers" EntityType="Self.FigureItemsByPlayer" />
+          <EntitySet Name="Figures" EntityType="Self.Figure" />
+          <EntitySet Name="FiguresInGames" EntityType="Self.FiguresInGame" />
+          <EntitySet Name="FiguresOfPlayers" EntityType="Self.FiguresOfPlayer" />
+          <EntitySet Name="GamesHistories" EntityType="Self.GamesHistory" />
+          <EntitySet Name="PlayerGifts" EntityType="Self.PlayerGift" />
+          <EntitySet Name="Players" EntityType="Self.Player" />
+          <AssociationSet Name="FK_FigureItemsByPlayer_FigureItem_Code" Association="Self.FK_FigureItemsByPlayer_FigureItem_Code">
+            <End Role="FigureItems" EntitySet="FigureItems" />
+            <End Role="FigureItemsByPlayer" EntitySet="FigureItemsByPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FigureItemsByPlayer_FiguresOfPlayer_Code" Association="Self.FK_FigureItemsByPlayer_FiguresOfPlayer_Code">
+            <End Role="FiguresOfPlayer" EntitySet="FiguresOfPlayers" />
+            <End Role="FigureItemsByPlayer" EntitySet="FigureItemsByPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresInGames_Figure_Code" Association="Self.FK_FiguresInGames_Figure_Code">
+            <End Role="Figures" EntitySet="Figures" />
+            <End Role="FiguresInGames" EntitySet="FiguresInGames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresOfPlayer_Figure_Code" Association="Self.FK_FiguresOfPlayer_Figure_Code">
+            <End Role="Figures" EntitySet="Figures" />
+            <End Role="FiguresOfPlayer" EntitySet="FiguresOfPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresInGames_GamesHistory_Code" Association="Self.FK_FiguresInGames_GamesHistory_Code">
+            <End Role="GamesHistory" EntitySet="GamesHistories" />
+            <End Role="FiguresInGames" EntitySet="FiguresInGames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresInGames_Player_Code" Association="Self.FK_FiguresInGames_Player_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="FiguresInGames" EntitySet="FiguresInGames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FiguresOfPlayer_Player_Code" Association="Self.FK_FiguresOfPlayer_Player_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="FiguresOfPlayer" EntitySet="FiguresOfPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GamesHistory_PlayerOne_Code" Association="Self.FK_GamesHistory_PlayerOne_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="GamesHistory" EntitySet="GamesHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GamesHistory_PlayerTwo_Code" Association="Self.FK_GamesHistory_PlayerTwo_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="GamesHistory" EntitySet="GamesHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlayerGift_Player_Code" Association="Self.FK_PlayerGift_Player_Code">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="PlayerGift" EntitySet="PlayerGifts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GreatWarriorModelStoreContainer" CdmEntityContainer="GreatWarriorEntities">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="GreatWarriorModel.Admin">
+              <MappingFragment StoreEntitySet="Admins">
+                <ScalarProperty Name="Admin_Email" ColumnName="Admin_Email" />
+                <ScalarProperty Name="Admin_Password" ColumnName="Admin_Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FigureItems">
+            <EntityTypeMapping TypeName="GreatWarriorModel.FigureItem">
+              <MappingFragment StoreEntitySet="FigureItems">
+                <ScalarProperty Name="FigureItem_Name" ColumnName="FigureItem_Name" />
+                <ScalarProperty Name="Item_Image" ColumnName="Item_Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FigureItemsByPlayers">
+            <EntityTypeMapping TypeName="GreatWarriorModel.FigureItemsByPlayer">
+              <MappingFragment StoreEntitySet="FigureItemsByPlayer">
+                <ScalarProperty Name="Player_Email" ColumnName="Player_Email" />
+                <ScalarProperty Name="Figure_Name" ColumnName="Figure_Name" />
+                <ScalarProperty Name="FigureItem_Name" ColumnName="FigureItem_Name" />
+                <ScalarProperty Name="Item_Level" ColumnName="Item_Level" />
+                <ScalarProperty Name="Figure_Attack" ColumnName="Figure_Attack" />
+                <ScalarProperty Name="Figure_Defense" ColumnName="Figure_Defense" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Figures">
+            <EntityTypeMapping TypeName="GreatWarriorModel.Figure">
+              <MappingFragment StoreEntitySet="Figures">
+                <ScalarProperty Name="Figure_Name" ColumnName="Figure_Name" />
+                <ScalarProperty Name="Figure_Image" ColumnName="Figure_Image" />
+                <ScalarProperty Name="Figure_Attack" ColumnName="Figure_Attack" />
+                <ScalarProperty Name="Figure_Defense" ColumnName="Figure_Defense" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FiguresInGames">
+            <EntityTypeMapping TypeName="GreatWarriorModel.FiguresInGame">
+              <MappingFragment StoreEntitySet="FiguresInGames">
+                <ScalarProperty Name="Player_One_Email" ColumnName="Player_One_Email" />
+                <ScalarProperty Name="Player_Two_Email" ColumnName="Player_Two_Email" />
+                <ScalarProperty Name="Game_Date" ColumnName="Game_Date" />
+                <ScalarProperty Name="Player_Email" ColumnName="Player_Email" />
+                <ScalarProperty Name="Figure_Name" ColumnName="Figure_Name" />
+                <ScalarProperty Name="Figure_Level" ColumnName="Figure_Level" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FiguresOfPlayers">
+            <EntityTypeMapping TypeName="GreatWarriorModel.FiguresOfPlayer">
+              <MappingFragment StoreEntitySet="FiguresOfPlayer">
+                <ScalarProperty Name="Player_Email" ColumnName="Player_Email" />
+                <ScalarProperty Name="Figure_Name" ColumnName="Figure_Name" />
+                <ScalarProperty Name="Figure_Level" ColumnName="Figure_Level" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GamesHistories">
+            <EntityTypeMapping TypeName="GreatWarriorModel.GamesHistory">
+              <MappingFragment StoreEntitySet="GamesHistory">
+                <ScalarProperty Name="Player_One_Email" ColumnName="Player_One_Email" />
+                <ScalarProperty Name="Player_Two_Email" ColumnName="Player_Two_Email" />
+                <ScalarProperty Name="Game_Date" ColumnName="Game_Date" />
+                <ScalarProperty Name="Winner_Player" ColumnName="Winner_Player" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlayerGifts">
+            <EntityTypeMapping TypeName="GreatWarriorModel.PlayerGift">
+              <MappingFragment StoreEntitySet="PlayerGift">
+                <ScalarProperty Name="Gift_Code" ColumnName="Gift_Code" />
+                <ScalarProperty Name="Player_Email" ColumnName="Player_Email" />
+                <ScalarProperty Name="Gift_Level" ColumnName="Gift_Level" />
+                <ScalarProperty Name="Gift_Receive" ColumnName="Gift_Receive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Players">
+            <EntityTypeMapping TypeName="GreatWarriorModel.Player">
+              <MappingFragment StoreEntitySet="Players">
+                <ScalarProperty Name="Player_Email" ColumnName="Player_Email" />
+                <ScalarProperty Name="Player_Name" ColumnName="Player_Name" />
+                <ScalarProperty Name="Player_Password" ColumnName="Player_Password" />
+                <ScalarProperty Name="Player_Score" ColumnName="Player_Score" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
