@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react'
 const Login = props => {
     let timer;
     useEffect(() => {
-        AsyncStorage.clear();
+        //AsyncStorage.clear();
         HandleGoMain();
         let x = 1;
         let y = 10;
