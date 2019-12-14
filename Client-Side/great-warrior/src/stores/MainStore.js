@@ -4,49 +4,23 @@ import io from 'socket.io-client'
 import { IP } from '../routes/Connection'
 
 class MainStore {
-    socket = null;
-    globalChat = [];
+    currentUser = null;
+    showGlobalChat = false;
 
-    setSocket = () => {
-        this.socket = io(`${IP}:3001`);
-        console.log('a user connected, socket!=null', this.socket !== null);
-        this.getMessages();
+    setCurrentUser = (user) => {
+        this.currentUser = user;
     }
 
-    getMessages = () => {
-        console.log('setGetMessage1');
-        this.socket.on('chat message', msg => {
-            this.setGlobalChat(msg);
-            //this.setMessage(msg);
-            console.log('getmessage: ', msg);
-        });
-        console.log('setGetMessage2');
-    }
-
-    setGlobalChat = (msg) => {
-        this.globalChat = [...this.globalChat, msg]
-    }
-
-    sendMessage = (msg) => {
-        console.log(msg)
-        this.socket.emit('chat message', msg);
-        console.log('sent message');
-        //this.setMessage('');
-    }
-
-    setMessage = (val) => {
-        this.message = val;
+    setShowGlobalChat = (value) => {
+        this.showGlobalChat = value;
     }
 }
 
 decorate(MainStore, {
-    socket: observable,
-    globalChat: observable,
-    message: observable,
-    setSocket: action,
-    setSendMessage: action,
-    setGlobalChat: action,
-    setMessage: action,
+    currentUser: observable,
+    showGlobalChat: observable,
+    setCurrentUser: action,
+    setShowGlobalChat: action
 });
 
 export default new MainStore()

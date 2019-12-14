@@ -20,5 +20,5 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
-  page: { flex: 1, marginTop: StatusBar.currentHeight }
+  page: { flex: 1 }
 });

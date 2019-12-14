@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import {
     ImageBackground, View, Text, TextInput, TouchableOpacity, Alert,
-    Image, KeyboardAvoidingView, StyleSheet, AsyncStorage
+    Image, KeyboardAvoidingView, StyleSheet, AsyncStorage, StatusBar
 } from 'react-native'
 import { observer, inject } from 'mobx-react'
 
 const Login = props => {
+    const { loginStore, registerStore } = props.rootStore;
+
     let timer;
     useEffect(() => {
         //AsyncStorage.clear();
@@ -14,30 +16,30 @@ const Login = props => {
         let y = 10;
         timer = setInterval(() => {
             //console.log('timer')
-            if (props.rootStore.loginStore.characterPosition.x === 40 || props.rootStore.loginStore.characterPosition.x === -40) {
+            if (loginStore.characterPosition.x === 40 || loginStore.characterPosition.x === -40) {
                 x *= -1;
-                if (props.rootStore.loginStore.characterPosition.y === 20 || props.rootStore.loginStore.characterPosition.y === -40)
+                if (loginStore.characterPosition.y === 20 || loginStore.characterPosition.y === -40)
                     y *= -1;
-                props.rootStore.loginStore.setCharacterPosition(0, y)
+                loginStore.setCharacterPosition(0, y)
             }
-            props.rootStore.loginStore.setCharacterPosition(x, 0)
+            loginStore.setCharacterPosition(x, 0)
         }, 100);
     }, [])
 
     useEffect(() => {
         HandleGoMain();
-    }, [props.rootStore.registerStore.goBack])
+    }, [registerStore.goBack])
 
     const HandleGoMain = () => {
         AsyncStorage.getItem('user').then(res => res !== null && props.navigation.replace('Main') && clearInterval(timer));
     }
 
     const HandleLogin = () => {
-        if (props.rootStore.loginStore.email.trim() !== '' && props.rootStore.loginStore.password.trim() !== '') {
-            props.rootStore.loginStore.login()
+        if (loginStore.email.trim() !== '' && loginStore.password.trim() !== '') {
+            loginStore.login()
                 .then(res => {
                     res === 'notExist' ? Alert.alert('Warning', 'Wrang email or password')
-                        : res ? AsyncStorage.setItem('user', props.rootStore.loginStore.email).then(HandleGoMain())
+                        : res ? AsyncStorage.setItem('user', loginStore.email).then(HandleGoMain())
                             : Alert.alert('Error', 'There is problem with the server.\nTry again later')
                 });
         }
@@ -45,11 +47,11 @@ const Login = props => {
     }
 
     const HandleFaceBookLogin = () => {
-        props.rootStore.loginStore.facebookLogin().then(res => HandleSocialLogin(res));
+        loginStore.facebookLogin().then(res => HandleSocialLogin(res));
     }
 
     const HandleGoogleLogin = () => {
-        props.rootStore.loginStore.googleLogin().then(res => HandleSocialLogin(res));
+        loginStore.googleLogin().then(res => HandleSocialLogin(res));
     }
 
     const HandleSocialLogin = res => {
@@ -58,7 +60,7 @@ const Login = props => {
     }
 
     return (
-        <KeyboardAvoidingView style={styles.page} behavior="padding" >
+        <KeyboardAvoidingView style={[styles.page, { paddingTop: StatusBar.currentHeight }]} behavior='padding' >
             <ImageBackground style={styles.page} resizeMode='stretch' source={require('../../assets/images/screen2.png')}>
                 <View style={styles.logo}>
                     <Image style={styles.logoImage} source={require('../../assets/images/logo.png')} resizeMode='contain' />
@@ -69,16 +71,16 @@ const Login = props => {
                         placeholder='Example@example.com'
                         placeholderTextColor='black'
                         keyboardType='email-address'
-                        value={props.rootStore.loginStore.email}
-                        onChangeText={e => props.rootStore.loginStore.setEmail(e)} />
+                        value={loginStore.email}
+                        onChangeText={e => loginStore.setEmail(e)} />
                     <TextInput
                         style={styles.txtInput}
                         placeholder="Password"
                         placeholderTextColor='black'
                         maxLength={20}
                         secureTextEntry={true}
-                        value={props.rootStore.loginStore.password}
-                        onChangeText={e => props.rootStore.loginStore.setPassword(e)} />
+                        value={loginStore.password}
+                        onChangeText={e => loginStore.setPassword(e)} />
                     <TouchableOpacity style={styles.submitButton} onPress={HandleLogin}>
                         <Text>Login</Text>
                     </TouchableOpacity>
@@ -93,8 +95,8 @@ const Login = props => {
                 </View>
                 <View style={styles.bottom}>
                     <TouchableOpacity style={[styles.characterButton, {
-                        left: `${props.rootStore.loginStore.characterPosition.x}%`,
-                        top: `${props.rootStore.loginStore.characterPosition.y}%`
+                        left: `${loginStore.characterPosition.x}%`,
+                        top: `${loginStore.characterPosition.y}%`
                     }]}
                         onPress={() => props.navigation.navigate('Register')}
                     >

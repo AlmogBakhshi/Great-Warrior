@@ -1,6 +1,6 @@
 import { decorate, observable, action, configure } from 'mobx'
 configure({ enforceActions: "observed" });
-import { IP } from '../routes/Connection'
+import * as Fetch from '../fetches/Fetch'
 
 class RegisterStore {
     email = '';
@@ -25,31 +25,14 @@ class RegisterStore {
     }
 
     emailExist = async (email) => {
-        return await fetch(`${IP}:3000/api/players/${email}`, {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json;charset=utf-8"
-            })
-        })
-            .then(res => res.json())
-            .then(res => res)
-            .catch(err => console.warn(err))
+        return await Fetch.Get(`players/${email}`);
     }
 
     register = async () => {
         return await this.emailExist(this.email).then(res =>
-            res === 'notExist' ? fetch(`${IP}:3000/api/players/register`, {
-                method: "post",
-                headers: new Headers({
-                    "Content-Type": "application/json;charset=utf-8"
-                }),
-                body: JSON.stringify({ email: this.email, password: this.password })
-            })
-                .then(res => res.json())
-                .then(res => res)
-                .catch(err => console.warn(err))
-                : res ? 'exist' : res
-        ).catch(err => console.warn(err))
+            res === 'notExist' ? Fetch.Post('players/register', { email: this.email, password: this.password }) :
+                res ? 'exist' : res
+        ).catch(err => console.warn(err));
     }
 }
 

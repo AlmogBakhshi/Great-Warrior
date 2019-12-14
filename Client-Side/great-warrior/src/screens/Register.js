@@ -1,26 +1,26 @@
 import React from 'react'
 import {
     View, Text, TextInput, TouchableOpacity, Image, AsyncStorage,
-    ImageBackground, Alert, KeyboardAvoidingView, StyleSheet
+    ImageBackground, Alert, KeyboardAvoidingView, StyleSheet, StatusBar
 } from 'react-native'
 import { observer, inject } from 'mobx-react'
 
 const Register = props => {
     const regexEmail = /^(([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}))$/;
     const regexPassword = /^(.{6,20})$/;
-
-    const { email, password, confirmPassword } = props.rootStore.registerStore;
+    const { registerStore } = props.rootStore;
+    const { email, password, confirmPassword } = registerStore;
 
     const HandleSubmit = () => {
         if (regexEmail.test(email.toUpperCase()) && regexPassword.test(password) &&
             regexPassword.test(confirmPassword) && password === confirmPassword) {
-            props.rootStore.registerStore.register()
+            registerStore.register()
                 .then(res => {
                     res === 'exist' ? Alert.alert('Warning', 'Email already exist')
                         : res ? AsyncStorage.setItem('user', email)
                             .then(() => {
                                 props.navigation.goBack();
-                                props.rootStore.registerStore.setGoBack()
+                                registerStore.setGoBack()
                             })
                             : Alert.alert('Error', 'There is problem with the server.\nTry again later')
                 })
@@ -28,7 +28,7 @@ const Register = props => {
     }
 
     return (
-        <KeyboardAvoidingView style={styles.page} behavior="padding" >
+        <KeyboardAvoidingView style={[styles.page, { paddingTop: StatusBar.currentHeight }]} behavior="padding" >
             <ImageBackground style={styles.page} resizeMode='stretch' source={require('../../assets/images/screen2.png')}>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.backButton} onPress={() => props.navigation.goBack()}>
@@ -47,7 +47,7 @@ const Register = props => {
                             placeholder='Example@example.com'
                             keyboardType='email-address'
                             value={email}
-                            onChangeText={e => props.rootStore.registerStore.setEmail(e)}
+                            onChangeText={e => registerStore.setEmail(e)}
                         />
                         <Text style={styles.inputError}>
                             {(email === '' && "Enter your email" || !regexEmail.test(email.toUpperCase()) && "Email is invalid" ||
@@ -65,7 +65,7 @@ const Register = props => {
                             maxLength={20}
                             secureTextEntry={true}
                             value={password}
-                            onChangeText={e => props.rootStore.registerStore.setPassword(e)} />
+                            onChangeText={e => registerStore.setPassword(e)} />
                         <Text style={styles.inputError}>
                             {(password === '' && "Enter a password" ||
                                 !regexPassword.test(password) && "The password sold be between 6 - 20 characters" ||
@@ -83,7 +83,7 @@ const Register = props => {
                             maxLength={20}
                             secureTextEntry={true}
                             value={confirmPassword}
-                            onChangeText={e => props.rootStore.registerStore.setConfirmPassword(e)} />
+                            onChangeText={e => registerStore.setConfirmPassword(e)} />
                         <Text style={styles.inputError}>
                             {(confirmPassword === '' && "Confirm your password" ||
                                 !regexPassword.test(confirmPassword) && "The password sold be between 6 - 20 characters" ||
