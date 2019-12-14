@@ -1,0 +1,9 @@
+.main {
+    min-width: 600px;
+}
+
+.bodyContainer {
+    width: 90%;
+    margin: auto;
+    margin-top: 15px;
+}
