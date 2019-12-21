@@ -55,8 +55,12 @@ namespace server.Controllers
                                                             f.Player_Email == figuresInGame.Player_Email &&
                                                             f.Figure_Name == figuresInGame.Figure_Name);
                     if (editFiguresInGame == null) return Content(HttpStatusCode.NotFound, false);
-                    entities.FiguresInGames.Remove(editFiguresInGame);
-                    entities.FiguresInGames.Add(figuresInGame);
+                    editFiguresInGame.Player_One_Email = figuresInGame.Player_One_Email;
+                    editFiguresInGame.Player_Two_Email = figuresInGame.Player_Two_Email;
+                    editFiguresInGame.Game_Date = figuresInGame.Game_Date;
+                    editFiguresInGame.Player_Email = figuresInGame.Player_Email;
+                    editFiguresInGame.Figure_Name = figuresInGame.Figure_Name;
+                    editFiguresInGame.Figure_Level = figuresInGame.Figure_Level;
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
                 }

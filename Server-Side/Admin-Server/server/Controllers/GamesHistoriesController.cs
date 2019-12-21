@@ -53,8 +53,10 @@ namespace server.Controllers
                                                                 f.Player_Two_Email == gamesHistory.Player_Two_Email &&
                                                                 f.Game_Date == gamesHistory.Game_Date);
                         if (editGamesHistory == null) return Content(HttpStatusCode.NotFound, false);
-                        entities.GamesHistories.Remove(editGamesHistory);
-                        entities.GamesHistories.Add(gamesHistory);
+                    editGamesHistory.Player_One_Email = gamesHistory.Player_One_Email;
+                    editGamesHistory.Player_Two_Email = gamesHistory.Player_Two_Email;
+                    editGamesHistory.Game_Date = gamesHistory.Game_Date;
+                    editGamesHistory.Winner_Player = gamesHistory.Winner_Player;
                         entities.SaveChanges();
                         return Content(HttpStatusCode.OK, true);
                     }

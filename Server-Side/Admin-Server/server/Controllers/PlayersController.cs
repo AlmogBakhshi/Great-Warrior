@@ -57,11 +57,12 @@ namespace server.Controllers
                 {
                     var editPlayer = entities.Players.SingleOrDefault(p => p.Player_Email == email);
                     if (editPlayer == null) return Content(HttpStatusCode.NotFound, false);
-                    player.Player_Password = player.Player_Password.Trim() != "" ?
+                    editPlayer.Player_Name = player.Player_Name;
+                    editPlayer.Player_Password = player.Player_Password.Trim() != "" ?
                         GenerateSHA512String(player.Player_Password != null ? player.Player_Password : "") :
                         player.Player_Password = editPlayer.Player_Password;
-                    entities.Players.Remove(editPlayer);
-                    entities.Players.Add(player);
+                    editPlayer.Player_Name = player.Player_Name;
+                    editPlayer.Player_Score = player.Player_Score;
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
                 }

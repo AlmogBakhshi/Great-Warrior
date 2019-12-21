@@ -50,8 +50,9 @@ namespace server.Controllers
                 {
                     var editFigure = entities.Figures.SingleOrDefault(f => f.Figure_Name == figure.Figure_Name);
                     if (editFigure == null) return Content(HttpStatusCode.NotFound, false);
-                    entities.Figures.Remove(editFigure);
-                    entities.Figures.Add(figure);
+                    editFigure.Figure_Name = figure.Figure_Name;
+                    editFigure.Figure_Attack = figure.Figure_Attack;
+                    editFigure.Figure_Defense = figure.Figure_Defense;
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
                 }

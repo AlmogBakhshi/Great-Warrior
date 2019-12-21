@@ -52,8 +52,9 @@ namespace server.Controllers
                                                             f => f.Player_Email == figuresOfPlayer.Player_Email &&
                                                             f.Figure_Name == figuresOfPlayer.Figure_Name);
                     if (editFiguresOfPlayer == null) return Content(HttpStatusCode.NotFound, false);
-                    entities.FiguresOfPlayers.Remove(editFiguresOfPlayer);
-                    entities.FiguresOfPlayers.Add(figuresOfPlayer);
+                    editFiguresOfPlayer.Player_Email = figuresOfPlayer.Player_Email;
+                    editFiguresOfPlayer.Figure_Name = figuresOfPlayer.Figure_Name;
+                    editFiguresOfPlayer.Figure_Level = figuresOfPlayer.Figure_Level;
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
                 }

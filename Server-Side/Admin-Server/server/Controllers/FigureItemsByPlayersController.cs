@@ -53,8 +53,12 @@ namespace server.Controllers
                                                         f.Figure_Name == figureItemsByPlayer.Figure_Name &&
                                                         f.FigureItem_Name == figureItemsByPlayer.FigureItem_Name);
                     if (editFigureItem == null) return Content(HttpStatusCode.NotFound, false);
-                    entities.FigureItemsByPlayers.Remove(editFigureItem);
-                    entities.FigureItemsByPlayers.Add(figureItemsByPlayer);
+                    editFigureItem.Player_Email = figureItemsByPlayer.Player_Email;
+                    editFigureItem.Figure_Name = figureItemsByPlayer.Figure_Name;
+                    editFigureItem.FigureItem_Name = figureItemsByPlayer.FigureItem_Name;
+                    editFigureItem.Item_Level = figureItemsByPlayer.Item_Level;
+                    editFigureItem.Figure_Attack = figureItemsByPlayer.Figure_Attack;
+                    editFigureItem.Figure_Defense = figureItemsByPlayer.Figure_Defense;
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
                 }

@@ -50,8 +50,7 @@ namespace server.Controllers
                 {
                     var editFigureItem = entities.FigureItems.SingleOrDefault(f => f.FigureItem_Name == figureItem.FigureItem_Name );
                     if (editFigureItem == null) return Content(HttpStatusCode.NotFound, false);
-                    entities.FigureItems.Remove(editFigureItem);
-                    entities.FigureItems.Add(figureItem);
+                    editFigureItem.FigureItem_Name = figureItem.FigureItem_Name;
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
                 }

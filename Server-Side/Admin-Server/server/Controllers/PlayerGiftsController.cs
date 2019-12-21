@@ -50,8 +50,10 @@ namespace server.Controllers
                 {
                     var editPlayerGift = entities.PlayerGifts.SingleOrDefault(f => f.Gift_Code == playerGift.Gift_Code);
                     if (editPlayerGift == null) return Content(HttpStatusCode.NotFound, false);
-                    entities.PlayerGifts.Remove(editPlayerGift);
-                    entities.PlayerGifts.Add(playerGift);
+                    editPlayerGift.Gift_Code = playerGift.Gift_Code;
+                    editPlayerGift.Player_Email = playerGift.Player_Email;
+                    editPlayerGift.Gift_Level = playerGift.Gift_Level;
+                    editPlayerGift.Gift_Receive = playerGift.Gift_Receive;
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
                 }
