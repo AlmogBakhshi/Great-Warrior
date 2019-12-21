@@ -77,7 +77,9 @@ namespace server.Controllers
                 {
                     var editAdmin = entities.Admins.SingleOrDefault(a => a.Admin_Email == email);
                     if (editAdmin == null) return Content(HttpStatusCode.NotFound, false);
-                    admin.Admin_Password = GenerateSHA512String(admin.Admin_Password != null ? admin.Admin_Password : "");
+                    admin.Admin_Password = admin.Admin_Password.Trim() != "" ?
+                        GenerateSHA512String(admin.Admin_Password != null ? admin.Admin_Password : "") :
+                        admin.Admin_Password = editAdmin.Admin_Password;
                     entities.Admins.Remove(editAdmin);
                     entities.Admins.Add(admin);
                     entities.SaveChanges();

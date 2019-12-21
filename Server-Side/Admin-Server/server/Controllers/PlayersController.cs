@@ -57,7 +57,9 @@ namespace server.Controllers
                 {
                     var editPlayer = entities.Players.SingleOrDefault(p => p.Player_Email == email);
                     if (editPlayer == null) return Content(HttpStatusCode.NotFound, false);
-                    player.Player_Password = GenerateSHA512String(player.Player_Password != null ? player.Player_Password : "");
+                    player.Player_Password = player.Player_Password.Trim() != "" ?
+                        GenerateSHA512String(player.Player_Password != null ? player.Player_Password : "") :
+                        player.Player_Password = editPlayer.Player_Password;
                     entities.Players.Remove(editPlayer);
                     entities.Players.Add(player);
                     entities.SaveChanges();
