@@ -5,6 +5,8 @@ import '../styles/MainStyle.css';
 import Header from '../components/Header';
 import Admins from '../components/Admins';
 import Players from '../components/Players';
+import Figures from '../components/Figures';
+import FiguresOfPlayer from '../components/FiguresOfPlayer';
 
 const Main = (props) => {
     const { mainStore } = props.rootStore;
@@ -25,14 +27,20 @@ const Main = (props) => {
                 return <Admins />
             case 1:
                 return <Players />
+            case 2:
+                return <Figures />
+            case 3:
+                return <FiguresOfPlayer />
             default:
                 return <Admins />
         }
     }
 
+    const titles = ['Admins', 'Players', 'Figures', 'Figures Of Player'];
+
     return (
         <div className='main'>
-            <Header setSelectedTab={HandleSelectedTab} selectedTab={mainStore.selectedTab} />
+            <Header setSelectedTab={HandleSelectedTab} selectedTab={mainStore.selectedTab} titles={titles} />
             <Body />
         </div>
     );

@@ -47,12 +47,6 @@ const Login = (props) => {
 
     return (
         <div className='login'>
-            {loginStore.loading && <div className='loginLoading'>
-                <GridLoader
-                    size={20}
-                    color={'rgb(0, 201, 255)'}
-                />
-            </div>}
             <div className='loginContainer'>
                 <img src={require('../assets/logo.png')} className='loginLogo' alt='Login' />
                 <form className='loginForm' >
@@ -69,6 +63,12 @@ const Login = (props) => {
                     <Button variant="contained" className='loginSubmit' onClick={HandleLogin} >Submit</Button>
                 </form>
             </div>
+            {loginStore.loading && <div className='loginLoading'>
+                <GridLoader
+                    size={20}
+                    color={'rgb(0, 201, 255)'}
+                />
+            </div>}
         </div>
     );
 }

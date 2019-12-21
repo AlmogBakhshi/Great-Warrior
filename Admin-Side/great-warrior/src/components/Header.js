@@ -24,8 +24,7 @@ const Header = (props) => {
                 <Paper className='mainHeaderLinksContainer' style={{ backgroundColor: 'rgba(0,0,0,0)' }}>
                     <Tabs value={props.selectedTab} indicatorColor="primary" textColor="primary"
                         onChange={HandleSelectedTab} >
-                        <Tab style={{ fontSize: '0.8em' }} label="Admins" />
-                        <Tab style={{ fontSize: '0.8em' }} label="Players" />
+                        {props.titles.map((title, index) => <Tab key={index} style={{ fontSize: '0.8em' }} label={title} />)}
                     </Tabs>
                 </Paper>
                 <Button style={{ fontSize: '0.8em' }} variant="contained" onClick={HandleLogout}>Logout</Button>

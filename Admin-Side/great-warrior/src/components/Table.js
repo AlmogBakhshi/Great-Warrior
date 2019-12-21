@@ -50,27 +50,29 @@ const Table = (props) => {
         <Paper className='table' style={{ backgroundColor: 'rgba(0,0,0,0)' }}>
             <table>
                 <thead>
-                    <tr> {/* set all titles of table */}
+                    <tr>
+                        {/* set all titles of table */}
                         {props.titles.map((title, index) => <th key={index}>{title}</th>)}
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody> {/* set each data of titles in table */}
-                    {!props.data && <tr><td colSpan={props.titles.length}><RingLoader size={60} color={'rgb(0, 201, 255)'} /></td></tr>}
-                    {props.data && props.data.slice((currentPage - 1) * itemEachPage, (props.data.length / itemEachPage > 1 &&
-                        currentPage * itemEachPage / props.data.length < 1) ? currentPage * itemEachPage % props.data.length :
-                        props.data.length)
-                        .map((data, index) => <tr key={index}>
-                            {props.titles.map((title, index) => <td key={index}>
-                                {title !== 'Password' ? data[`${props.title}_${title}`] : '********'}
-                            </td>)}
-                            <td>
-                                <div className='tableAction'>
-                                    <FaPencilAlt size='1em' onClick={() => props.editItem(data)} />
-                                    <FaTrashAlt size='1em' onClick={() => props.deleteItem(data)} />
-                                </div>
-                            </td>
-                        </tr>)}
+                <tbody>
+                    {/* set each data of titles in table */}
+                    {!props.data ? <tr><td className='tableRingLoader' colSpan={props.titles.length + 1}><RingLoader size={60} color={'rgb(0, 201, 255)'} /></td></tr> :
+                        props.data.length > 0 && props.data.slice((currentPage - 1) * itemEachPage, (props.data.length / itemEachPage > 1 &&
+                            currentPage * itemEachPage / props.data.length < 1) ? currentPage * itemEachPage % props.data.length :
+                            props.data.length)
+                            .map((data, index) => <tr key={index}>
+                                {props.titles.map((title, index) => <td key={index}>
+                                    {title !== 'Password' ? data[`${props.title ? props.title + '_' : ''}${title}`] : '********'}
+                                </td>)}
+                                <td>
+                                    <div className='tableAction'>
+                                        <FaPencilAlt size='1em' onClick={() => props.editItem(data)} />
+                                        <FaTrashAlt size='1em' onClick={() => props.deleteItem(data)} />
+                                    </div>
+                                </td>
+                            </tr>)}
                 </tbody>
             </table >
             {/* set table pages0 */}

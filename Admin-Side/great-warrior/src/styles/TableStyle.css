@@ -41,6 +41,10 @@
     border-right: 0;
 }
 
+.table .tableRingLoader > div {
+    left: 50%;
+}
+
 .tableAction {
     display: flex;
     justify-content: space-evenly;

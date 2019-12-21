@@ -3,7 +3,8 @@ import * as Fetch from '../fetches/Fetch';
 
 class PlayersStore {
     allPlayers = [];
-    filteredAllPlayers = [];
+    filteredAllPlayers = null;
+    selectedPlayerData = null;
 
     setAllPlayers = (players) => {
         this.allPlayers = players;
@@ -12,6 +13,10 @@ class PlayersStore {
 
     setFilteredAllPlayers = (players) => {
         this.filteredAllPlayers = players;
+    }
+
+    setSelectedPlayerData = async (player) => {
+        this.selectedPlayerData = player;
     }
 
     searchPlayers = (value) => {
@@ -23,18 +28,39 @@ class PlayersStore {
     }
 
     fetchAllPlayers = () => {
+        this.setFilteredAllPlayers(null);
         Fetch.Get('players')
             .then(res => this.setAllPlayers(res))
+    }
+
+    fetchAddPlayer = (player) => {
+        Fetch.Post('players', player)
+            .then(() => this.fetchAllPlayers())
+    }
+
+    fetchEditPlayer = (email, player) => {
+        Fetch.Put(`players/${email}`, player)
+            .then(() => this.fetchAllPlayers())
+    }
+
+    fetchDeletePlayer = (player) => {
+        Fetch.Delete(`players/${player.Player_Email}`)
+            .then(() => this.fetchAllPlayers())
     }
 }
 
 decorate(PlayersStore, {
     allPlayers: observable,
     filteredAllPlayers: observable,
+    selectedPlayerData: observable,
     setAllPlayers: action,
     setFilteredAllPlayers: action,
+    setSelectedPlayerData: action,
     searchPlayers: action,
     fetchAllPlayers: action,
+    fetchAddPlayer: action,
+    fetchEditPlayer: action,
+    fetchDeletePlayer: action,
 })
 
 export default new PlayersStore();

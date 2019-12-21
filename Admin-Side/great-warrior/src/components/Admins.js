@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import SearchAndAddItem from './SearchAndAddItem';
 import Table from './Table';
-import AddOrEditDialog from './AddOrEditDialog';
+import AddOrEditItem from './AddOrEditItem';
 
 const Admins = (props) => {
     const { adminsStore } = props.rootStore;
@@ -12,35 +12,45 @@ const Admins = (props) => {
         adminsStore.fetchAllAdmins();
     }, [])
 
+    const titles = ['Email', 'Password'];
+
     const HandleSearchValue = (value) => {
         adminsStore.searchAdmins(value);
     }
 
     const HandleAddAdmin = () => {
-        //console.log('get in');
-        // setShowDialog(true);
+        setShowDialog(true);
     }
 
     const HandleEditAdmin = (data) => {
-        console.log('edit: ', data);
+        adminsStore.setSelectedAdminData(data)
+            .then(() => setShowDialog(true))
     }
 
     const HandleDeleteAdmin = (data) => {
-        console.log('delete: ', data);
+        adminsStore.fetchDeleteAdmin(data);
     }
 
-    const handleClose = (val) => {
-        console.log(val);
+    const HandleClose = () => {
+        adminsStore.setSelectedAdminData(null);
+        setShowDialog(false);
+    }
+
+    const HandleSave = (email, admin) => {
+        adminsStore.setSelectedAdminData(null);
+        email ? adminsStore.fetchEditAdmin(email, admin) : adminsStore.fetchAddAdmin(admin);
+        setShowDialog(false);
     }
 
     return (
         <div className='bodyContainer'>
-            {/* <AddOrEditDialog title='Admin' open={showDialog} onClose={() => setShowDialog(false)} titles={['Email', 'Password']} /> */}
             <SearchAndAddItem title='Admin' setSearch={HandleSearchValue} addItem={HandleAddAdmin} />
-            <Table title='Admin' titles={['Email', 'Password']}
+            <Table title='Admin' titles={titles}
                 data={adminsStore.filteredAllAdmins}
                 editItem={HandleEditAdmin}
                 deleteItem={HandleDeleteAdmin} />
+            {showDialog && <AddOrEditItem title='Admin' titles={titles} onClose={HandleClose} id='Admin_Email'
+                data={adminsStore.selectedAdminData} save={HandleSave} />}
         </div>
     );
 }
