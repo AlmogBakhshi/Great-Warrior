@@ -4,12 +4,12 @@ const key = 'greatWarrior';
 
 // define constructor function that gets `app, sql, config` send to it
 module.exports = (app, sql, config) => {
-    app.post('/api/players/login', async (req, res) => {
+    app.post('/api/players/login', (req, res) => {
         // create hahs
         const hash = crypto.createHmac('sha512', key)
         hash.update(req.body.password);
         const password = hash.digest('hex');
-        return await sql.connect(config)
+        sql.connect(config)
             .then(() => sql.query`select Player_Email from Players 
                             where Player_Email = ${req.body.email} and Player_Password = ${password}`)
             .then(result => {
@@ -29,7 +29,8 @@ module.exports = (app, sql, config) => {
         const password = hash.digest('hex');
         // sql connection
         sql.connect(config)
-            .then(() => sql.query`insert into Players(Player_Email, Player_Password) values(${req.body.email}, ${password})`)
+            .then(() => sql.query`insert into Players(Player_Email, Player_Password, Player_Score) 
+                            values(${req.body.email}, ${password}, 0)`)
             .then(result => {
                 sql.close();
                 if (parseInt(result.rowsAffected) === 0) return res.status(500).send(false)
@@ -44,7 +45,7 @@ module.exports = (app, sql, config) => {
     app.post('/api/players/socialRegister', async (req, res) => {
         // sql connection
         return await sql.connect(config)
-            .then(() => sql.query`insert into Players(Player_Email) values(${req.body.email})`)
+            .then(() => sql.query`insert into Players(Player_Email, Player_Score) values(${req.body.email}, 0)`)
             .then(result => {
                 sql.close();
                 if (parseInt(result.rowsAffected) === 0) return res.status(500).send(false)
