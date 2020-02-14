@@ -24,11 +24,13 @@ class LoginStore {
     }
 
     login = async () => {
-        return await Fetch.Post('players/login', { email: this.email, password: this.password });
+        return await Fetch.Post('players/login', { email: this.email, password: this.password })
+            .catch(err => console.error(err));
     }
 
     emailExist = async (email) => {
-        return await Fetch.Get(`players/${email}`);
+        return await Fetch.Get(`players/${email}`)
+            .catch(err => console.error(err));
     }
 
     facebookLogin = async () => {

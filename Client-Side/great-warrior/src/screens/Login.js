@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import {
     ImageBackground, View, Text, TextInput, TouchableOpacity, Alert,
-    Image, KeyboardAvoidingView, StyleSheet, AsyncStorage, StatusBar
+    Image, KeyboardAvoidingView, StyleSheet, AsyncStorage
 } from 'react-native'
 import { observer, inject } from 'mobx-react'
 
@@ -10,7 +10,7 @@ const Login = props => {
 
     let timer;
     useEffect(() => {
-        //AsyncStorage.clear();
+        AsyncStorage.clear();
         HandleGoMain();
         let x = 1;
         let y = 10;
@@ -60,7 +60,7 @@ const Login = props => {
     }
 
     return (
-        <KeyboardAvoidingView style={[styles.page, { paddingTop: StatusBar.currentHeight }]} behavior='padding' >
+        <KeyboardAvoidingView style={styles.page} behavior='padding' >
             <ImageBackground style={styles.page} resizeMode='stretch' source={require('../../assets/images/screen2.png')}>
                 <View style={styles.logo}>
                     <Image style={styles.logoImage} source={require('../../assets/images/logo.png')} resizeMode='contain' />

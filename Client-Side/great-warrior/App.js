@@ -6,6 +6,8 @@ import StackNavigator from './src/routes/StackNavigator'
 
 I18nManager.allowRTL(false);
 I18nManager.forceRTL(false);
+StatusBar.setHidden(true);
+console.disableYellowBox = true;
 
 const App = () => {
   return (

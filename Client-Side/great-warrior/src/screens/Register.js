@@ -1,7 +1,7 @@
 import React from 'react'
 import {
     View, Text, TextInput, TouchableOpacity, Image, AsyncStorage,
-    ImageBackground, Alert, KeyboardAvoidingView, StyleSheet, StatusBar
+    ImageBackground, Alert, KeyboardAvoidingView, StyleSheet
 } from 'react-native'
 import { observer, inject } from 'mobx-react'
 
@@ -28,7 +28,7 @@ const Register = props => {
     }
 
     return (
-        <KeyboardAvoidingView style={[styles.page, { paddingTop: StatusBar.currentHeight }]} behavior="padding" >
+        <KeyboardAvoidingView style={styles.page} behavior="padding" >
             <ImageBackground style={styles.page} resizeMode='stretch' source={require('../../assets/images/screen2.png')}>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.backButton} onPress={() => props.navigation.goBack()}>

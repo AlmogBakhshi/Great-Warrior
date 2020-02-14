@@ -1,6 +1,6 @@
 import { decorate, observable, action, configure } from 'mobx'
 configure({ enforceActions: "observed" });
-import * as Fetch from '../fetches/Fetch'
+import * as Fetch from '../fetches/Fetch';
 
 class RegisterStore {
     email = '';
@@ -25,7 +25,8 @@ class RegisterStore {
     }
 
     emailExist = async (email) => {
-        return await Fetch.Get(`players/${email}`);
+        return await Fetch.Get(`players/${email}`)
+            .catch(err => console.error(err));
     }
 
     register = async () => {

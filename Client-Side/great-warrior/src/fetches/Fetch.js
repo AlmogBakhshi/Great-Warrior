@@ -31,10 +31,11 @@ export const Put = async (controller, body) => {
         .catch(err => console.warn(err))
 }
 
-export const Delete = async (controller) => {
+export const Delete = async (controller, body) => {
     return await fetch(`${url}${controller}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
     })
         .then(res => res.json())
         .catch(err => console.warn(err))
