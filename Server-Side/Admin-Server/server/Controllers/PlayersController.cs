@@ -37,6 +37,8 @@ namespace server.Controllers
                 using (var entities = new GreatWarriorEntities())
                 {
                     player.Player_Password = GenerateSHA512String(player.Player_Password != null ? player.Player_Password : "");
+                    if (player.Player_Score == null)
+                        player.Player_Score = 0;
                     entities.Players.Add(player);
                     entities.SaveChanges();
                     return Content(HttpStatusCode.OK, true);
