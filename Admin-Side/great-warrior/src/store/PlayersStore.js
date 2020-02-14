@@ -23,7 +23,7 @@ class PlayersStore {
         const filtered = this.allPlayers.filter(player =>
             player.Player_Email.toUpperCase().includes(value.toUpperCase()) ||
             (player.Player_Name && player.Player_Name.toUpperCase().includes(value.toUpperCase())) ||
-            (player.Player_Score && player.Player_Score.toUpperCase().includes(value.toUpperCase())));
+            (player.Player_Score && player.Player_Score.toString().includes(value.toUpperCase())));
         this.setFilteredAllPlayers(filtered);
     }
 

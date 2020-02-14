@@ -12,7 +12,7 @@ const Header = (props) => {
 
     const HandleLogout = () => {
         localStorage.removeItem('remember');
-        history.goBack();
+        history.replace('/');
     }
 
     return (

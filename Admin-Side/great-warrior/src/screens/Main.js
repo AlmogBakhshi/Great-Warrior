@@ -13,8 +13,7 @@ const Main = (props) => {
     const history = useHistory();
 
     useEffect(() => {
-        const remember = localStorage.getItem('remember');
-        !remember && history.goBack();
+        !localStorage.getItem('remember') && history.replace('/');
     }, [])
 
     const HandleSelectedTab = (selectedTab) => {

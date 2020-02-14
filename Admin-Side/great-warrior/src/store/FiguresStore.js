@@ -21,7 +21,7 @@ class FiguresStore {
 
     searchFigures = (value) => {
         const filtered = this.allFigures.filter(figure => figure.Figure_Name.toUpperCase().includes(value.toUpperCase()) ||
-            figure.Figure_Attack.includes(value) || figure.Figure_Defense.includes(value));
+            figure.Figure_Attack.toString().includes(value) || figure.Figure_Defense.toString().includes(value));
         this.setFilteredAllFigures(filtered);
     }
 

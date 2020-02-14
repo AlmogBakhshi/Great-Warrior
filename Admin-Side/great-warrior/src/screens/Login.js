@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import '../styles/LoginStyle.css';
 import { TextField, FormControlLabel, Checkbox, Button } from '@material-ui/core';
-import { useHistory } from 'react-router-dom'
+import { useHistory, Redirect } from 'react-router-dom'
 import { GridLoader } from 'react-spinners';
 
 const Login = (props) => {

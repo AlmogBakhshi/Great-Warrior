@@ -7,10 +7,10 @@ import Main from './screens/Main';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/site04/build'>
       <Switch>
-        <Route exact path='/' component={Login} />
         <Route path='/main' component={Main} />
+        <Route path='/' component={Login} />
       </Switch>
     </BrowserRouter>
   );
